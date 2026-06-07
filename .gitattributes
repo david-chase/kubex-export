@@ -1,1 +1,1 @@
-kubex-inventory.ini filter=secretstripper
+kubex-export.ini filter=secretstripper
