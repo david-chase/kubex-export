@@ -7,7 +7,7 @@ param(
 )
 
 #-----------------------------------------------------------------------------------------------
-#  kubexport 
+#  kubex-export 
 #  PowerShell script to query a customer instance and export relevant information as a CSV 
 #-----------------------------------------------------------------------------------------------
 
@@ -81,9 +81,9 @@ Write-Host
 Write-Host ::: Kubexport ::: -ForegroundColor Cyan
 Write-Host 
 
-# Locate kubextract.ini next to this script
+# Locate kubex-export.ini next to this script
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$iniPath = Join-Path $scriptDir 'kubextract.ini'
+$iniPath = Join-Path $scriptDir 'kubex-export.ini'
 
 $iniParams = Get-IniSection -Path $iniPath -Section 'Parameters'
 
