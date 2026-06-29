@@ -78,7 +78,7 @@ function Escape-CsvValue {
 # Begin main program
 #-----------------------------------------------------------------------------------------------
 Write-Host 
-Write-Host ::: Kubexport ::: -ForegroundColor Cyan
+Write-Host ::: Kubex-Export - Export a customer instance to CSV ::: -ForegroundColor Cyan
 Write-Host 
 
 # Locate kubex-export.ini next to this script
@@ -364,24 +364,15 @@ foreach ($qKey in $queryNames) {
 					$records = @($records)
 				}
 
-				$linesOut = @()
-				$linesOut += ($fields | ForEach-Object { $_ }) -join ','
-				foreach ($rec in $records) {
-					$row = @()
-					foreach ($f in $fields) {
-						$val = $null
-						if ($rec -is [psobject] -and $rec.PSObject.Properties.Name -contains $f) {
-							$val = $rec.$f
-						}
-						$row += (Escape-CsvValue $val)
-					}
-					$linesOut += ($row -join ',')
-				}
-
 				$today = Get-Date -Format 'yyyy-MM-dd'
 				$fname = "$today $Instance $queryNameSection.csv"
 				$outFile = Join-Path $OutPath $fname
-				$linesOut | Set-Content -Path $outFile -Encoding UTF8
+
+				# Optimized: Pipe records straight into Export-Csv using select-object definitions
+				$records | 
+					Select-Object -Property $fields | 
+					Export-Csv -Path $outFile -NoTypeInformation -Encoding UTF8
+				
 				Write-Output "Query '$queryNameSection' -> wrote $(($records.Count)) rows to $outFile"
 			}
 		}
@@ -396,4 +387,3 @@ if ($Beep) {
 }
 
 exit 0
-
